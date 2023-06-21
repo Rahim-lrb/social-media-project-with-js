@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>social media</title>
+    <!-- IMPORT SCRIPTS & STYLES -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <!-- ! =======MODALS======= -->
+    <!-- .LOGIN MODAL -->
+    <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Username:</label>
+                  <input type="text" class="form-control" id="username-input" value="yarob99">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Password:</label>
+                  <input type="password" class="form-control" id="password-input" value="123456">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="loginBtnClicked()">Login</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- LOGIN MODAL --> 
+    <!-- .register MODAL -->
+    <div class="modal fade" id="register-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">register a new user</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">name</label>
+                  <input type="text" class="form-control" id="register-name-input">
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Username:</label>
+                  <input type="text" class="form-control" id="register-username-input">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Password:</label>
+                  <input type="password" class="form-control" id="register-password-input">
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">image</label>
+                  <input type="file" class="form-control" id="profile-input">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="registerBtnClicked()">register</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- register MODAL --> 
+    <!-- . create post MODAL -->
+    <div class="modal fade" id="create-post-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">create a new post</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Title</label>
+                    <input type="text" class="form-control" id="title-input">
+                  </div>
+                  <div class="mb-3">
+                    <textarea name="" id="body-input" style="width: 100%; height: 100px; border-color: grey; border-radius: 10px; resize: none;">body</textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">image</label>
+                    <input type="file" class="form-control" id="image-input">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="createNewPost()">create</button>
+              </div>
+            </div>
+          </div>
+    </div>
+    <!-- create post modal MODAL --> 
+    <!-- =======MODALS======= -->
+
+    <!-- add post button -->
+    <div class="bg-primary" id="add-btn" data-bs-toggle="modal" data-bs-target="#create-post-modal">+</div>
+    <!-- add post button -->
+
+    <!-- ! =========ALERTS======== -->
+    <div id="success-alert" class="show fade" style="position: fixed; z-index: 99999; width: 30%; bottom: 100px; right: 0; height: 30px;"></div>
+    <!-- =========ALERTS======== -->
+
+
+
+    <!-- ! NAVIGATION BAR CONT-->
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="col-9">
+                <nav class="navbar navbar-expand-lg bg-light shadow rounded pt-3">
+                    <div class="container-fluid">
+                    <a class="navbar-brand" href="home.html">Tarmeez</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+
+                        <!-- NON-LOGGED IN USER -->
+                        <div class="d-flex w-100 justify-content-end" id="logged-in-div">
+                            <button id="login-btn" type="button" data-bs-toggle="modal" data-bs-target="#login-modal" class="btn btn-outline-success mx-2">Login</button>
+                            <button id="register-btn" type="button" data-bs-toggle="modal" data-bs-target="#register-modal" class="btn btn-outline-success">Register</button>
+                        </div>
+                        <!-- NON-LOGGED IN USER -->
+                        <!-- logged in user -->
+                        <div class="d-flex w-100 justify-content-end" id="logged-out-div">
+                          <button onclick="logOut()" id="logout-btn" type="button" class="btn btn-outline-danger mx-2">Log out</button>
+                      </div>
+                        <!-- logged in user -->
+
+                    </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- ! NAVIGATION BAR CONT -->
+
+    <!-- ! MAIN CONTENT -->
+    <div class="container" style="height: 1000px;">
+        
+        <!-- POSTS -->
+        <div class="d-flex justify-content-center mt-5">
+            <div class="col-9">
+                <div id="posts">
+                    
+                </div>
+            </div>
+        </div>
+        <!--// POSTS //-->
+    </div>
+    <!-- MAIN CONTENT -->
+</body>
+
+<script src="js/main.js"></script>
+</html>

@@ -83,7 +83,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">create a new post</h1>
+                <h1 class="modal-title fs-5" id="postModalTitle">create a new post</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -98,6 +98,7 @@
                   <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">image</label>
                     <input type="file" class="form-control" id="image-input">
+                    <input type="hidden" class="form-control" id="is-edit-post-input" value="false">
                   </div>
                 </form>
               </div>

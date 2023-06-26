@@ -156,16 +156,16 @@
         </div>
       </div>
       <div class="row d-flex justify-content-center mt-5">
+        <!-- <h1><span id="username-span">yarob's</span>posts</h1> -->
         <div class="col-9" id="post">
-          <h1><span id="username-span">yarob's</span>posts</h1>
         </div>
       </div>
       <!-- POSTS row -->
-      <div class="card shadow-sm">
+      <!-- <div class="card shadow-sm">
         <div class="card-header">                      
           <img src="./profile-pics/tree.jpg" class="img-thumbnail rounded-5" style="width: 40px; height: 40px"><b>@yarhmm</b>
-        </div>
-  
+        </div> -->
+<!--   
         <div class="card-body" onclick="postClicked(1)">
             <img src="./profile-pics/tree.jpg" class="card-img-top">
             <h6 style="color: rgb(171, 171, 171)">2 min ago</h6>
@@ -179,13 +179,13 @@
                 <span>(3) Comments</span>
             </div>
             <hr>
-        </div>
+        </div> -->
   
-        <!-- COMMENTS -->
-        <div id="comments">
+        <!-- COMMENTS --> 
+        <!-- <div id="comments"> -->
                 
             <!-- COMMENT -->
-            <div class="p-3 rounded-3" style="background: rgb(241, 246, 255)">
+            <!-- <div class="p-3 rounded-3" style="background: rgb(241, 246, 255)">
                 <div>
                     <img src="./profile-pics/1.png" class="img-thumbnail rounded-5" style="width: 40px; height: 40px">
                     <b>@yarhmm</b>
@@ -194,11 +194,11 @@
                 <div  >
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quibusdam numquam odio totam, aspernatur neque nisi sit assumenda a iure harum! Reprehenderit accusantium animi quam repellat saepe modi! Ullam, porro eaque.
                 </div>
-            </div>
+            </div> -->
             <!--// COMMENT //-->
   
             <!-- COMMENT -->
-            <div class="p-3 rounded-3 mt-3" style="background: rgb(241, 246, 255)">
+            <!-- <div class="p-3 rounded-3 mt-3" style="background: rgb(241, 246, 255)">
                 <div>
                     <img src="./profile-pics/1.png" class="img-thumbnail rounded-5" style="width: 40px; height: 40px">
                     <b>@yarhmm</b>
@@ -207,15 +207,14 @@
                 <div  >
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quibusdam numquam odio totam, aspernatur neque nisi sit assumenda a iure harum! Reprehenderit accusantium animi quam repellat saepe modi! Ullam, porro eaque.
                 </div>
-            </div>
+            </div> -->
             <!--// COMMENT //-->
-        </div>
-        <!-- COMMENTS -->                    
+        <!-- </div> -->
+        <!-- COMMENTS                    
       </div>
 
-    </div>
-
-<!-- </div> -->
+    </div>-->
+    </div> 
 
 </body>
 <script src="js/mainLogic.js"></script>
@@ -250,6 +249,7 @@
           `;
         }
         const postContent = `
+        <h1><span id="username-span">${post.username}</span>posts</h1>
         <div class="card shadow-sm">
         <div class="card-header">                      
           <img src="./profile-pics/tree.jpg" class="img-thumbnail rounded-5" style="width: 40px; height: 40px"><b>${author.username}</b>
@@ -274,7 +274,11 @@
         <div id="comments">
           ${commentsContent}
         </div>
-        <!-- COMMENTS -->                    
+        <!-- COMMENTS -->  
+        <div class="input-group mb-3" id="add-comment-div">                            
+          <input id="comment-input" type="text" placeholder="add your comment.." class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+          <button class="btn btn-outline-primary" type="button" id="button-addon1" onclick="createCommentClicked()">send</button>
+        </div>                
       </div>
         `
         document.getElementById("post").innerHTML = "";
@@ -282,6 +286,28 @@
         document.getElementById("username-span").innerHTML = author.username;
     })
   }
+  function createCommentClicked() {
+    let commentBody = document.getElementById("comment-input").value;
+    console.log(commentBody)
+    let params = {
+      "body": commentBody,
+    }
+    let token = localStorage.getItem("token");
+    let url = `${baseUrl}/posts/${id}/comments`
+    axios.post(url, params,{
+      headers: {
+        "authorization": `Bearer ${token}`
+      }
+    }).then((response) => {
+      console.log(response);
+      getPost();
+      showAlert("comment added successfully");
+    }).catch((error) => {
+      console.log(error)
+      showAlert(error.response.data.message, "danger");
+    })
+  }
   
 </script>
+<script src="js/mainLogic.js"></script>
 </html>

@@ -28,8 +28,6 @@ function setUpUi() {
 
 
 
-
-
 // ! auth functions
 // ! log in
 function loginBtnClicked() {

@@ -31,7 +31,7 @@ function getPosts(reload = true, page = 1) {
                 <img src="${post.author.profile_image}" class="rounded-circle border border-2" style="height: 40px; height: 40px;">
                 <bold>${post.author.username}</bold>
                 </h5>
-                <div class="card-body">
+                <div class="card-body" onclick="postClicked(${post.id})" style="cursor: pointer">
                 <img src="${post.image}" class="w-100">
                 <h6 class="mt-1" style="color: rgb(179, 176, 176);">${post.created_at} mins ago</h6>
                 <h5>${postTitle}</h5>
@@ -203,4 +203,8 @@ function createNewPost() {
     }).catch((error) => {
         showAlert(error.response.data.message, "danger");
     })
+}
+
+function postClicked(postId) {
+    window.location = `postDetail.html?postId=${postId}`
 }

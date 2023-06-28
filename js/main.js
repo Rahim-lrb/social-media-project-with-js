@@ -21,16 +21,23 @@ function getPosts(reload = true, page = 1) {
             document.getElementById("posts").innerHTML = "";
         } 
         for (post of posts) {
-            let postTitle;
             if (post.title != null) {
                 postTitle = post.title;
+            }
+
+            // ! show or hide edit button
+            let user = getCurrentUser();
+            let isMyPost = user != null && post.author.id == user.id;
+            let editBtnContent = ``
+            if (isMyPost) {
+                editBtnContent = `<button class='btn btn-secondary' style='float: right' onclick="editPostClicked('${encodeURIComponent(JSON.stringify(post))}')">edit</button>`;
             }
             let content = `
             <div class="card shadow">
                 <div class="card-header">
                     <img src="${post.author.profile_image}" class="rounded-circle border border-2" style="height: 40px; height: 40px;">
                     <bold>${post.author.username}</bold>
-                    <button class='btn btn-secondary' style='float: right' onclick="editPostClicked('${encodeURIComponent(JSON.stringify(post))}')">edit</button>
+                    ${editBtnContent}
                 </div>
                 <div class="card-body" onclick="postClicked(${post.id})" style="cursor: pointer">
                     <img src="${post.image}" class="w-100">
@@ -65,13 +72,18 @@ function getPosts(reload = true, page = 1) {
 }
 
 
-// ! new post
+// ! new post or edit a post
 function createNewPost() {
-    let title = document.getElementById("title-input").value;
-    let body = document.getElementById("body-input").value;
-    let image = document.getElementById("image-input").files[0];
+    let postId = document.getElementById("post-id-input").value
+    let isCreate = postId == null || postId == "";
 
-    let formData = new FormData();
+
+    const title = document.getElementById("title-input").value
+    const body = document.getElementById("body-input").value
+    const image = document.getElementById("image-input").files[0]
+    const token = localStorage.getItem("token")
+
+    let formData = new FormData()
     formData.append("body", body)
     formData.append("title", title)
     formData.append("image", image)
@@ -79,24 +91,33 @@ function createNewPost() {
     //     "body": body,
     //     "title": title,
     // };
-    let token = localStorage.getItem("token");
-    let headers = {
+
+    let url = ``;  
+    const headers = {
         "Content-Type": "multipart/form-data",
         "authorization": `Bearer ${token}`
     }
+
+    if(isCreate) { // . when creating
+        url = `${baseUrl}/posts`            
+    }else { // when updating
+        formData.append("_method", "put")
+        url = `${baseUrl}/posts/${postId}`
+    }
     
-    axios.post(`${baseUrl}/posts`, formData, {
+    axios.post(url, formData, {
         headers: headers
     })
     .then((response) => {
-        console.log(response);
-        const modal = document.getElementById("create-post-modal");
-        const modalInstance = bootstrap.Modal.getInstance(modal);
+        const modal = document.getElementById("create-post-modal")
+        const modalInstance = bootstrap.Modal.getInstance(modal)
         modalInstance.hide();
-        showAlert("new post has been created");
-        getPosts();
-    }).catch((error) => {
-        showAlert(error.response.data.message, "danger");
+        getPosts()
+        showAlert("New Post Has Been Created")
+    })
+    .catch((error) => {
+        const message = error.response.data.message
+        showAlert(message, "danger")
     })
 }
 
@@ -107,11 +128,25 @@ function postClicked(postId) {
 
 function editPostClicked(postObj) {
     let post = JSON.parse(decodeURIComponent(postObj))
-    console.log(post)
-    document.getElementById("postModalTitle").innerHTML = "edit post"
-    document.getElementById("title-input").value = post.title; 
+    document.getElementById("postModalTitle").innerHTML = "edit post";
+    document.getElementById("change").innerHTML = "Update"
+    document.getElementById("title-input").value = post.title;
     document.getElementById("body-input").value = post.body;
-    document.getElementById("is-edit-post-input").value = true
+    document.getElementById("post-id-input").value = post.id;
+
     let modal = new bootstrap.Modal(document.getElementById("create-post-modal"), {})
     modal.toggle();
+
+}
+
+function add() {
+    document.getElementById("postModalTitle").innerHTML = "create post";
+    document.getElementById("change").innerHTML = "create"
+    document.getElementById("title-input").value = "";
+    document.getElementById("body-input").value = "";
+    document.getElementById("post-id-input").value = "";
+
+    let modal = new bootstrap.Modal(document.getElementById("create-post-modal"), {})
+    modal.toggle();
+
 }

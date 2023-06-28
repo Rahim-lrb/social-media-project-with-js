@@ -98,13 +98,14 @@
                   <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">image</label>
                     <input type="file" class="form-control" id="image-input">
-                    <input type="hidden" class="form-control" id="is-edit-post-input" value="false">
+
+                    <input type="hidden" class="form-control" id="post-id-input" value="">
                   </div>
                 </form>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="createNewPost()">create</button>
+                <button type="button" id="change" class="btn btn-primary" onclick="createNewPost()">create</button>
               </div>
             </div>
           </div>
@@ -113,7 +114,7 @@
     <!-- =======MODALS======= -->
 
     <!-- add post button -->
-    <div class="bg-primary" id="add-btn" data-bs-toggle="modal" data-bs-target="#create-post-modal">+</div>
+    <div class="bg-primary" id="add-btn" onclick="add()">+</div>
     <!-- add post button -->
 
     <!-- ! =========ALERTS======== -->
